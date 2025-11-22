@@ -5,7 +5,7 @@ namespace Fsi.General.Timers
 {
     /// <summary>
     /// Represents a simple countdown timer that can be started, paused, stopped,
-    /// and updated externally through <see cref="Tick"/>. Provides notifications
+    /// and updated in TimerManager<see cref="TimerManager"/> through <see cref="Tick"/>. Provides notifications
     /// when the timer ticks and when it completes.
     /// </summary>
     [Serializable]
@@ -18,15 +18,15 @@ namespace Fsi.General.Timers
         #region Events
         
         /// <summary>
-        /// Invoked when the timer reaches zero.
-        /// </summary>
-        private event Action Completed;
-        
-        /// <summary>
         /// Invoked every time the timer is updated through <see cref="Tick"/>,
-        /// providing the delta time that was applied.
+        /// providing the delta time that was applied. Set via event setter <see cref="OnTick"/>.
         /// </summary>
         private event Action<float> Ticked;
+        
+        /// <summary>
+        /// Invoked when the timer reaches zero. Set via event setter <see cref="OnComplete"/>.
+        /// </summary>
+        private event Action Completed;
         
         #endregion
         
@@ -55,7 +55,7 @@ namespace Fsi.General.Timers
         /// <summary>
         /// Returns how far the timer has progressed, from 0 to 1.
         /// </summary>
-        public float Normalized => 1f - (remaining / time);
+        public float Progress => 1f - remaining / time;
         
         #endregion
         
@@ -76,6 +76,8 @@ namespace Fsi.General.Timers
 
         #endregion
         
+        #region Constructors
+        
         /// <summary>
         /// Creates a new timer with the specified duration.
         /// </summary>
@@ -86,6 +88,10 @@ namespace Fsi.General.Timers
             remaining = time;
             status = TimerStatus.Uninitialized;
         }
+        
+        #endregion
+        
+        #region Timer Control
         
         /// <summary>
         /// Starts the timer and registers it with the <see cref="TimerManager"/>.
@@ -148,12 +154,17 @@ namespace Fsi.General.Timers
             remaining -= deltaTime;
             if (remaining <= 0)
             {
+                remaining = 0;
                 status = TimerStatus.Finished;
                 Completed?.Invoke();
             }
             
             Ticked?.Invoke(deltaTime);
         }
+        
+        #endregion
+        
+        #region Callback Setters
 
         /// <summary>
         /// Registers a callback to be invoked when the timer completes.
@@ -176,11 +187,17 @@ namespace Fsi.General.Timers
             Ticked += onTick;
             return this;
         }
+        
+        #endregion 
+        
+        #region Object Overrides
 
         /// <summary>
         /// Returns a readable description of the timer’s progress and state.
         /// </summary>
-        public override string ToString() => $"Timer - {remaining:0.00}s/{time}s ({Normalized * 100:00}%) - {status}";
+        public override string ToString() => $"Timer - {Remaining:0.00}s/{Time}s - {Status}";
+        
+        #endregion
 
         #region Serialization
         #if UNITY_EDITOR
