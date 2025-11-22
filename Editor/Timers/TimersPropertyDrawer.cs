@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Fsi.General.Timers
@@ -8,25 +7,34 @@ namespace Fsi.General.Timers
     [CustomPropertyDrawer(typeof(Timer))]
     public class TimersPropertyDrawer : PropertyDrawer
     {
+        #region Seralized Properties
+
+        private SerializedProperty property;
+
+        private SerializedProperty timeProp;
+        private SerializedProperty remProp;
+        private SerializedProperty statusProp;
+        
+        #endregion
+        
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
+            this.property = property;
             Foldout root = new(){text = property.displayName};
 
-            // Optional: your toolbar/header
-            Toolbar toolbar = new();
-            root.Add(toolbar);
+            BuildToolbar(root);
             
             // Serialized fields
-
-            SerializedProperty statusProp = property.FindPropertyRelative("status");
-            EnumField statusField = new(statusProp.displayName, (TimerStatus)statusProp.enumValueIndex);
-            statusField.BindProperty(statusProp);
-            root.Add(statusField);
-
+            remProp = property.FindPropertyRelative("remaining");
+            timeProp = property.FindPropertyRelative("time");
+            statusProp = property.FindPropertyRelative("status");
+            
+            // Time Group
+            #region Time Group
+            
             VisualElement timeGroup = new(){style = { flexDirection = FlexDirection.Row}};
             root.Add(timeGroup);
             
-            SerializedProperty remProp = property.FindPropertyRelative("remaining");
             FloatField remField = new("") { style = { flexGrow = 1 } };
             remField.BindProperty(remProp);
             timeGroup.Add(remField);
@@ -34,57 +42,21 @@ namespace Fsi.General.Timers
             Label div = new("   /");
             timeGroup.Add(div);
             
-            SerializedProperty timeProp = property.FindPropertyRelative("time");
             FloatField timeField = new("") { style = { flexGrow = 1 } };
             timeField.BindProperty(timeProp);
             timeGroup.Add(timeField);
             
-            // Build toolbar
+            #endregion
             
-            // Play
-            ToolbarButton playButton = new()
-                                       {
-                                           name = "Play",
-                                           text = "Play",
-                                       };
-            playButton.clicked += () =>
-                                  {
-                                      statusProp.enumValueIndex = (int)TimerStatus.Running;
-                                      property.serializedObject.ApplyModifiedProperties();
-                                      EditorUtility.SetDirty(property.serializedObject.targetObject);
-                                  };
-
-            toolbar.Add(playButton);
+            #region Status Group
             
-            // Pause
-            ToolbarButton pauseButton = new()
-                                       {
-                                           name = "Pause",
-                                           text = "Pause",
-                                       };
-            pauseButton.clicked += () =>
-                                  {
-                                      statusProp.enumValueIndex = (int)TimerStatus.Pause;
-                                      property.serializedObject.ApplyModifiedProperties();
-                                      EditorUtility.SetDirty(property.serializedObject.targetObject);
-                                  };
-
-            toolbar.Add(pauseButton);
+            // Status Group
             
-            // Stop
-            ToolbarButton stopButton = new()
-                                        {
-                                            name = "Stop",
-                                            text = "Stop",
-                                        };
-            stopButton.clicked += () =>
-                                   {
-                                       statusProp.enumValueIndex = (int)TimerStatus.Finished;
-                                       property.serializedObject.ApplyModifiedProperties();
-                                       EditorUtility.SetDirty(property.serializedObject.targetObject);
-                                   };
-
-            toolbar.Add(stopButton);
+            EnumField statusField = new(statusProp.displayName, (TimerStatus)statusProp.enumValueIndex);
+            statusField.BindProperty(statusProp);
+            root.Add(statusField);
+            
+            #endregion
             
             // Progress Bar
             ProgressBar bar = new();
@@ -106,5 +78,74 @@ namespace Fsi.General.Timers
             
             return root;
         }
+
+        private void BuildToolbar(VisualElement root)
+        {
+            #region Toolbar
+            // Optional: your toolbar/header
+            Toolbar toolbar = new();
+            root.Add(toolbar);
+            
+            #region Buttons
+            
+            // Play
+            ToolbarButton playButton = new()
+                                       {
+                                           name = "Play",
+                                           text = "Play",
+                                       };
+            
+            playButton.clicked += OnPlayButton;
+            toolbar.Add(playButton);
+            
+            // Pause
+            ToolbarButton pauseButton = new()
+                                        {
+                                            name = "Pause",
+                                            text = "Pause",
+                                        };
+            pauseButton.clicked += OnPauseButton;
+
+            toolbar.Add(pauseButton);
+            
+            // Stop
+            ToolbarButton stopButton = new()
+                                       {
+                                           name = "Stop",
+                                           text = "Stop",
+                                       };
+            stopButton.clicked += OnStopButton;
+
+            toolbar.Add(stopButton);
+            
+            #endregion
+            
+            #endregion
+        }
+
+        #region Toolbar Button Callbacks
+
+        private void OnPlayButton()
+        {
+            statusProp.enumValueIndex = (int)TimerStatus.Running;
+            property.serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(property.serializedObject.targetObject);
+        }
+
+        private void OnPauseButton()
+        {
+            statusProp.enumValueIndex = (int)TimerStatus.Pause;
+            property.serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(property.serializedObject.targetObject);
+        }
+
+        private void OnStopButton()
+        {
+            statusProp.enumValueIndex = (int)TimerStatus.Finished;
+            property.serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(property.serializedObject.targetObject);
+        }
+        
+        #endregion
     }
 }

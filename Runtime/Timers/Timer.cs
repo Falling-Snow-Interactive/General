@@ -5,8 +5,8 @@ namespace Fsi.General.Timers
 {
     /// <summary>
     /// Represents a simple countdown timer that can be started, paused, stopped,
-    /// and updated in TimerManager<see cref="TimerManager"/> through <see cref="Tick"/>. Provides notifications
-    /// when the timer ticks and when it completes.
+    /// and updated in TimerManager<see cref="TimerManager"/> through <see cref="Tick"/>.
+    /// Provides notifications when the timer ticks and when it completes.
     /// </summary>
     [Serializable]
     public class Timer : ISerializationCallbackReceiver
@@ -73,20 +73,21 @@ namespace Fsi.General.Timers
         [Tooltip("Time left before the timer completes, in seconds.")]
         [SerializeField]
         private float remaining = 0;
-
+        
         #endregion
         
         #region Constructors
-        
+
         /// <summary>
         /// Creates a new timer with the specified duration.
         /// </summary>
         /// <param name="time">The total countdown time in seconds.</param>
-        public Timer(float time)
+        /// <param name="status">Starting status of the timer.</param>
+        public Timer(float time, TimerStatus status = TimerStatus.Uninitialized)
         {
             this.time = time;
             remaining = time;
-            status = TimerStatus.Uninitialized;
+            this.status = status;
         }
         
         #endregion
