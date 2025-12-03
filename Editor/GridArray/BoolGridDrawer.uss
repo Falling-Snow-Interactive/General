@@ -1,0 +1,18 @@
+.bool-grid__cell {
+    border-width: 1px;
+    border-radius: 1px;
+    border-color: #555;
+    background-color: #3a3a3a;
+    -unity-font-style: normal;
+    padding: 0;
+    margin: 0;
+}
+
+.bool-grid__cell:hover {
+    background-color: #25ce1f;
+}
+
+.bool-grid__cell--on {
+    background-color: #3c7edb;
+    border-color: #5ba1ff;
+}
