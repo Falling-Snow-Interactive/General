@@ -10,7 +10,7 @@ namespace Fsi.General.Settings
         private const string FullPath = "Assets/Resources/" + ResourcePath + ".asset";
 
         private static GameSettings settings;
-        public static GameSettings Settings => settings ??= GetOrCreateSettings();
+        private static GameSettings Settings => settings ??= GetOrCreateSettings();
 
         [Header("Launch")]
 
