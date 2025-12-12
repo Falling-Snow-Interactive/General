@@ -15,14 +15,7 @@ namespace Fsi.General.Buckets
 
 		public void OnBeforeSerialize()
 		{
-			#if UNITY_EDITOR
-			if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
-			{
-				name = ToString();
-			}
-			#else
 			name = ToString();
-			#endif
 		}
 
 		public void OnAfterDeserialize() { }

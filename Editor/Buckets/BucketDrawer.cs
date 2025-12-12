@@ -10,8 +10,10 @@ namespace Fsi.General.Buckets
 		public override VisualElement CreatePropertyGUI(SerializedProperty property)
 		{
 			VisualElement root = new();
-			
-			root.Add(new PropertyField(property));
+
+			SerializedProperty entriesProp = property.FindPropertyRelative("entries");
+			PropertyField entriesField = new(entriesProp){label = property.displayName};
+			root.Add(entriesField);
 			
 			return root;
 		}

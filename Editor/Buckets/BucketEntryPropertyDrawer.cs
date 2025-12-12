@@ -9,38 +9,38 @@ namespace Fsi.General.Buckets
 	{
 		public override VisualElement CreatePropertyGUI(SerializedProperty property)
 		{
-			var root = new VisualElement
-			           {
-				           style =
-				           {
-					           flexDirection = FlexDirection.Row,
-					           flexGrow = 1
-				           }
-			           };
+			VisualElement root = new()
+			                     {
+				                     style =
+				                     {
+					                     flexDirection = FlexDirection.Row,
+					                     flexGrow = 1
+				                     }
+			                     };
+			
+			SerializedProperty weightProp = property.FindPropertyRelative("weight");
+			PropertyField weightField = new(weightProp)
+			                            {
+				                            label = "",
+				                            style =
+				                            {
+					                            flexGrow = 0,
+					                            width = 50
+				                            }
+			                            };
 			
 			SerializedProperty valueProp = property.FindPropertyRelative("value");
-			var valueField = new PropertyField(valueProp)
-			                 {
-				                 label = "",
-				                 style =
-				                 {
-					                 flexGrow = 1
-				                 }
-			                 };
+			PropertyField valueField = new(valueProp)
+			                           {
+				                           label = "",
+				                           style =
+				                           {
+					                           flexGrow = 1
+				                           }
+			                           };
 
-			SerializedProperty weightProp = property.FindPropertyRelative("weight");
-			var weightField = new PropertyField(weightProp)
-			                  {
-				                  label = "",
-				                  style =
-				                  {
-					                  flexGrow = 0,
-					                  width = 50
-				                  }
-			                  };
-
-			root.Add(valueField);
 			root.Add(weightField);
+			root.Add(valueField);
 
 			return root;
 		}
