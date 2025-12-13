@@ -1,11 +1,11 @@
 {
   "name": "com.fallingsnowinteractive.general",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "displayName": "FSI General",
   "description": "General package developed by Falling Snow Interactive.",
   "unity": "6000.2",
   "unityRelease": "6f2",
-  "keywords": ["Falling Snow Interactive", "General", "[FSI]"],
+  "keywords": ["Falling Snow Interactive", "General"],
   "author": {
     "name": "Kira Dinan",
     "email": "kira.dinan@fallingsnowinteractive.ca"
