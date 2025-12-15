@@ -2,7 +2,7 @@ using System;
 using Unity.Properties;
 using UnityEngine;
 
-namespace Fsi.Gameplay
+namespace Fsi.General.Math
 {
 	[GeneratePropertyBag]
 	[Serializable]
