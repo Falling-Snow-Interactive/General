@@ -201,7 +201,6 @@ namespace Fsi.General.Timers
         #endregion
 
         #region Serialization
-        #if UNITY_EDITOR
         
         public void OnBeforeSerialize()
         {
@@ -210,7 +209,6 @@ namespace Fsi.General.Timers
 
         public void OnAfterDeserialize() { }
         
-        #endif
         #endregion
     }
 }
