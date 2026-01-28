@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Fsi.General.Timers
@@ -11,7 +12,7 @@ namespace Fsi.General.Timers
     [Serializable]
     public class Timer : ISerializationCallbackReceiver
     {
-        [HideInInspector]
+        [HideInInspector, UsedImplicitly]
         [SerializeField]
         private string name;
         
@@ -72,7 +73,7 @@ namespace Fsi.General.Timers
         
         [Tooltip("Time left before the timer completes, in seconds.")]
         [SerializeField]
-        private float remaining = 0;
+        private float remaining;
         
         #endregion
         
@@ -103,6 +104,7 @@ namespace Fsi.General.Timers
         {
             if (!TimerManager.Instance)
             {
+                // ReSharper disable Unity.PerformanceAnalysis
                 Debug.LogError("Timer | Cannot find TimerManager. Please add the TimerManager component to the scene.");
             }
             

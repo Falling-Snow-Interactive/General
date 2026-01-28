@@ -1,0 +1,26 @@
+.shortcuts-editor {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.shortcuts-toolbar {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.shortcuts-toolbar__button {
+    padding: 5px;
+}
+
+.shortcuts-toolbar__menu {
+    padding: 5px;
+}
+
+.shortcuts-toolbar__refresh {
+    padding: 5px;
+}
+
+.shortcuts-toolbar__spacer{
+    flex-grow: 1;
+    flex-shrink: 0;
+}
