@@ -1,6 +1,6 @@
 {
   "name": "com.fallingsnowinteractive.general",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "FSI General",
   "description": "General package developed by Falling Snow Interactive.",
   "unity": "6000.2",
