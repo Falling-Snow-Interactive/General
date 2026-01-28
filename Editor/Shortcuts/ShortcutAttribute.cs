@@ -9,7 +9,8 @@ namespace Fsi.General.Shortcuts
     /// <remarks>
     /// Discovery contract: methods must be static, parameterless, and return void.
     /// </remarks>
-    [UsedImplicitly, MeansImplicitUse, AttributeUsage(AttributeTargets.Method, Inherited = false)]
+    [UsedImplicitly, MeansImplicitUse]
+    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
     public sealed class ShortcutAttribute : Attribute
     {
         public string Name { get; }
@@ -18,6 +19,7 @@ namespace Fsi.General.Shortcuts
         public ShortcutAttribute()
         {
             Name = "";
+            Priority = 0;
         }
         
         public ShortcutAttribute(string name = "", int priority = 0)
