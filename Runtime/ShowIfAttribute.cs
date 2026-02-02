@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Fsi.Gameplay
+namespace Fsi.General
 {
     public class ShowIfAttribute : PropertyAttribute
     {

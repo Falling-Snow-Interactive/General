@@ -1,24 +1,32 @@
 using System;
 using System.Linq;
-using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-namespace Fsi.Gameplay
+namespace Fsi.General
 {
     [CustomPropertyDrawer(typeof(ShowIfAttribute))]
     public class ShowIfAttributeDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            var root = new VisualElement();
+            VisualElement root = new();
 
-            var showIf = (ShowIfAttribute)attribute;
-            var conditionProperty = FindConditionProperty(property, showIf.ConditionField);
+            ShowIfAttribute showIf = (ShowIfAttribute)attribute;
+            SerializedProperty conditionProperty = FindConditionProperty(property, showIf.ConditionField);
 
-            var field = new PropertyField(property);
+            PropertyField field = new(property);
             root.Add(field);
+
+            if (conditionProperty != null)
+            {
+                root.TrackPropertyValue(conditionProperty, _ => UpdateVisibility());
+            }
+
+            UpdateVisibility();
+            return root;
 
             void UpdateVisibility()
             {
@@ -32,17 +40,9 @@ namespace Fsi.Gameplay
                 bool shouldShow = EvaluateConditions(conditionProperty, showIf.CompareValues, showIf.Or);
                 root.style.display = shouldShow ? DisplayStyle.Flex : DisplayStyle.None;
             }
-
-            if (conditionProperty != null)
-            {
-                root.TrackPropertyValue(conditionProperty, _ => UpdateVisibility());
-            }
-
-            UpdateVisibility();
-            return root;
         }
 
-        private SerializedProperty FindConditionProperty(SerializedProperty property, string conditionField)
+        private static SerializedProperty FindConditionProperty(SerializedProperty property, string conditionField)
         {
             // Example property.propertyPath: "steps.Array.data[0].npc"
             string path = property.propertyPath;
@@ -58,7 +58,7 @@ namespace Fsi.Gameplay
             return property.serializedObject.FindProperty(fullPath);
         }
 
-        private bool EvaluateConditions(SerializedProperty conditionProperty, object[] compareValues, bool or)
+        private static bool EvaluateConditions(SerializedProperty conditionProperty, object[] compareValues, bool or)
         {
             return or ? compareValues.Any(c => EvaluateCondition(conditionProperty, c)) 
                        : compareValues.All(c => EvaluateCondition(conditionProperty, c));
@@ -94,7 +94,7 @@ namespace Fsi.Gameplay
                         case string enumName:
                         {
                             string[] names = conditionProperty.enumNames;
-                            targetIndex = System.Array.IndexOf(names, enumName);
+                            targetIndex = Array.IndexOf(names, enumName);
                             break;
                         }
                         default:
@@ -104,7 +104,7 @@ namespace Fsi.Gameplay
                                 // [ShowIf(nameof(stepType), StepType.NPC)]
                                 string targetName = compareValue.ToString();
                                 string[] names = conditionProperty.enumNames;
-                                targetIndex = System.Array.IndexOf(names, targetName);
+                                targetIndex = Array.IndexOf(names, targetName);
                             }
 
                             break;
@@ -126,7 +126,7 @@ namespace Fsi.Gameplay
                 case SerializedPropertyType.Float:
                     if (compareValue is float f)
                     {
-                        return Math.Abs(conditionProperty.floatValue - f) < 0.0001f;
+                        return System.Math.Abs(conditionProperty.floatValue - f) < 0.0001f;
                     }
                     break;
                 case SerializedPropertyType.String:

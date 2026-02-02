@@ -70,11 +70,11 @@ namespace Fsi.General.Timers
                                                    });
             
             remField.RegisterValueChangedCallback(evt =>
-                                                   {
-                                                       bar.value = evt.newValue;
-                                                       property.serializedObject.ApplyModifiedProperties();
-                                                       EditorUtility.SetDirty(property.serializedObject.targetObject);
-                                                   });
+                                                  {
+                                                      bar.value = evt.newValue;
+                                                      property.serializedObject.ApplyModifiedProperties();
+                                                      EditorUtility.SetDirty(property.serializedObject.targetObject);
+                                                  });
             
             return root;
         }

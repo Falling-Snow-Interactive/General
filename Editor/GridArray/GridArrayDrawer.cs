@@ -42,17 +42,17 @@ namespace Fsi.General.GridArray
             
             // Container for the grid
             VisualElement gridContainer = new()
-            {
-                style =
-                {
-                    flexDirection = FlexDirection.Column,
+                                          {
+                                              style =
+                                              {
+                                                  flexDirection = FlexDirection.Column,
 
-                    paddingTop = GridSpacing,
-                    paddingRight = GridSpacing,
-                    paddingBottom = GridSpacing,
-                    paddingLeft = GridSpacing,
-                },
-            };
+                                                  paddingTop = GridSpacing,
+                                                  paddingRight = GridSpacing,
+                                                  paddingBottom = GridSpacing,
+                                                  paddingLeft = GridSpacing,
+                                              },
+                                          };
             scroll.Add(gridContainer);
             
             // Properties
@@ -60,10 +60,10 @@ namespace Fsi.General.GridArray
             SerializedProperty heightProp = property.FindPropertyRelative("height");
 
             Foldout optionFold = new()
-                               {
-                                   text = "Options",
-                                   value = false,
-                               };
+                                 {
+                                     text = "Options",
+                                     value = false,
+                                 };
             fold.Add(optionFold);
 
             PropertyField widthField = new(widthProp);
@@ -77,14 +77,14 @@ namespace Fsi.General.GridArray
 
             // Rebuild grid when width or height change
             widthField.RegisterCallback<ChangeEvent<int>>(_ =>
-            {
-                RebuildGrid(gridContainer, property);
-            });
+                                                          {
+                                                              RebuildGrid(gridContainer, property);
+                                                          });
 
             heightField.RegisterCallback<ChangeEvent<int>>(_ =>
-            {
-                RebuildGrid(gridContainer, property);
-            });
+                                                           {
+                                                               RebuildGrid(gridContainer, property);
+                                                           });
 
             return root;
         }
@@ -114,21 +114,21 @@ namespace Fsi.General.GridArray
             for (int row = height-1; row >= 0; row--)
             {
                 VisualElement rowContainer = new()
-                {
-                    style =
-                    {
-                        flexDirection = FlexDirection.Row,
-                        flexGrow = 1,
-                        flexShrink = 0,
+                                             {
+                                                 style =
+                                                 {
+                                                     flexDirection = FlexDirection.Row,
+                                                     flexGrow = 1,
+                                                     flexShrink = 0,
                         
-                        width = new StyleLength(StyleKeyword.Auto),
+                                                     width = new StyleLength(StyleKeyword.Auto),
 
-                        paddingTop = GridSpacing,
-                        paddingRight = GridSpacing,
-                        paddingBottom = GridSpacing,
-                        paddingLeft = GridSpacing,
-                    },
-                };
+                                                     paddingTop = GridSpacing,
+                                                     paddingRight = GridSpacing,
+                                                     paddingBottom = GridSpacing,
+                                                     paddingLeft = GridSpacing,
+                                                 },
+                                             };
                 gridContainer.Add(rowContainer);
 
                 Label rowLabel = new($"{row}")
@@ -152,34 +152,34 @@ namespace Fsi.General.GridArray
             
             // Add another one for the y labels
             VisualElement yLabelContainer = new()
-                                         {
-                                             style =
-                                             {
-                                                 flexDirection = FlexDirection.Row,
-                                                 flexGrow = 1,
-                                                 flexShrink = 0,
+                                            {
+                                                style =
+                                                {
+                                                    flexDirection = FlexDirection.Row,
+                                                    flexGrow = 1,
+                                                    flexShrink = 0,
                         
-                                                 width = new StyleLength(StyleKeyword.Auto),
+                                                    width = new StyleLength(StyleKeyword.Auto),
 
-                                                 paddingTop = GridSpacing,
-                                                 paddingRight = GridSpacing,
-                                                 paddingBottom = GridSpacing,
-                                                 paddingLeft = GridSpacing,
-                                             },
-                                         };
+                                                    paddingTop = GridSpacing,
+                                                    paddingRight = GridSpacing,
+                                                    paddingBottom = GridSpacing,
+                                                    paddingLeft = GridSpacing,
+                                                },
+                                            };
             gridContainer.Add(yLabelContainer);
 
             VisualElement xLabelSpace = new()
-                             {
-                                 style =
-                                 {
-                                     flexGrow = 0,
-                                     flexShrink = 0,
-                                     width = 10 + GridSpacing * width, 
+                                        {
+                                            style =
+                                            {
+                                                flexGrow = 0,
+                                                flexShrink = 0,
+                                                width = 10 + GridSpacing * width, 
                                      
-                                     unityTextAlign = TextAnchor.MiddleCenter,
-                                 },
-                             };
+                                                unityTextAlign = TextAnchor.MiddleCenter,
+                                            },
+                                        };
             yLabelContainer.Add(xLabelSpace);
 
             for (int col = 0; col < width; col++)

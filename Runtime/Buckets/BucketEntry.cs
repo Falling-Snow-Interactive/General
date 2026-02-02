@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Fsi.General.Buckets
@@ -6,7 +7,7 @@ namespace Fsi.General.Buckets
 	[Serializable]
 	public abstract class BucketEntry<T> : ISerializationCallbackReceiver
 	{
-		[HideInInspector]
+		[HideInInspector, UsedImplicitly]
 		[SerializeField]
 		private string name;
 

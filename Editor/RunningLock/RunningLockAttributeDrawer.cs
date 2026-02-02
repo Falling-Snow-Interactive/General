@@ -18,7 +18,7 @@ namespace Fsi.General.RunningLock
             field.SetEnabled(!Application.isPlaying);
 
             // Update when playmode changes
-            EditorApplication.playModeStateChanged += state =>
+            EditorApplication.playModeStateChanged += _ =>
                                                       {
                                                           // Update enabled state when entering/exiting playmode
                                                           field.SetEnabled(!Application.isPlaying);

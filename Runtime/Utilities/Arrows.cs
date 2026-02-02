@@ -22,15 +22,6 @@ namespace Fsi.General.Utilities
 		
 		[SerializeField]
 		private Color upColor = Color.green;
-		
-		[SerializeField]
-		private Color xColor = Color.blue;
-		
-		[SerializeField]
-		private Color yColor = Color.red;
-		
-		[SerializeField]
-		private Color zColor = Color.green;
 
 		#if UNITY_EDITOR
 		private void OnDrawGizmos()
@@ -58,10 +49,10 @@ namespace Fsi.General.Utilities
 		{
 			Handles.DrawLine(position, position + forward * size, size);
 			Handles.ConeHandleCap(-1, 
-				position + forward * size, 
-				Quaternion.LookRotation(forward), 
-				size / 5f,
-				EventType.Repaint);
+			                      position + forward * size, 
+			                      Quaternion.LookRotation(forward), 
+			                      size / 5f,
+			                      EventType.Repaint);
 		}
 		#endif
 	}
@@ -69,18 +60,9 @@ namespace Fsi.General.Utilities
 	[Flags]
 	public enum ArrowDirection
 	{
-		None = 0,
-		
 		// Local Space
 		Forward = 1 << 0,
 		Right = 1 << 1,
 		Up = 1 << 2,
-		
-		// World Space
-		X = 1 << 3,
-		Y = 1 << 4,
-		Z = 1 << 5,
-		
-		Everything = ~0,
 	}
 }
