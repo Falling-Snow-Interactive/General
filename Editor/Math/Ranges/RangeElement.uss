@@ -1,0 +1,33 @@
+.range_root {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-direction: row;
+}
+
+.range_label {
+    width: 40%;
+    margin-left: 2px;
+}
+
+.range_field {
+    /*height: 18px;*/
+
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-direction: row;
+}
+
+.range_field_label {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.range_field_value {
+    /*height: 18px;*/
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.range_field_space{
+    width: 5px;
+}
