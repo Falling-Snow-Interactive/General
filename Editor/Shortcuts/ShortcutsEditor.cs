@@ -55,6 +55,17 @@ namespace Fsi.General.Shortcuts
             toolbar.Add(s);
             
             ToolbarButton refreshButton = new(BuildToolbar) { text = "Refresh" };
+            Texture refreshIcon = EditorGUIUtility.IconContent("Refresh").image;
+            if (refreshIcon != null)
+            {
+                Image refreshImage = new()
+                                     {
+                                         image = refreshIcon,
+                                         scaleMode = ScaleMode.ScaleToFit
+                                     };
+                refreshImage.AddToClassList("shortcuts-toolbar__icon");
+                refreshButton.Insert(0, refreshImage);
+            }
             refreshButton.AddToClassList("shortcuts-toolbar__refresh");
             toolbar.Add(refreshButton);
         }

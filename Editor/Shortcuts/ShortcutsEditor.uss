@@ -18,6 +18,14 @@
 
 .shortcuts-toolbar__refresh {
     padding: 5px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.shortcuts-toolbar__icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
 }
 
 .shortcuts-toolbar__spacer{
