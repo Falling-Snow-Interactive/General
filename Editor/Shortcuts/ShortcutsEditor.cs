@@ -109,6 +109,7 @@ namespace Fsi.General.Shortcuts
                     {
                         menu = new ToolbarMenu { text = rootMenuName };
                         menu.AddToClassList("shortcuts-toolbar__menu");
+                        AddIcon(menu, ResolveShortcutIcon(attribute));
                         toolbarMenus[rootMenuName] = menu;
                         toolbar?.Add(menu);
                     }
@@ -125,8 +126,33 @@ namespace Fsi.General.Shortcuts
                                                };
 
                 shortcutButton.AddToClassList("shortcuts-toolbar__button");
+                AddIcon(shortcutButton, ResolveShortcutIcon(attribute));
                 toolbar?.Add(shortcutButton);
             }
+        }
+
+        private static Texture2D ResolveShortcutIcon(ShortcutAttribute attribute)
+        {
+            string icon = attribute?.Icon?.Trim();
+            if (string.IsNullOrEmpty(icon))
+            {
+                return null;
+            }
+
+            Texture2D texture = EditorGUIUtility.IconContent(icon).image as Texture2D;
+            return texture != null ? texture : AssetDatabase.LoadAssetAtPath<Texture2D>(icon);
+        }
+
+        private static void AddIcon(VisualElement element, Texture2D texture)
+        {
+            if (element == null || texture == null)
+            {
+                return;
+            }
+
+            Image icon = new() { image = texture };
+            icon.AddToClassList("shortcuts-toolbar__icon");
+            element.Insert(0, icon);
         }
 
         private static bool ValidateShortcutMethod(MethodInfo method)
