@@ -15,17 +15,20 @@ namespace Fsi.General.Shortcuts
     {
         public string Name { get; }
         public int Priority { get; }
+        public string Icon { get; set; }
 
         public ShortcutAttribute()
         {
             Name = "";
             Priority = 0;
+            Icon = "";
         }
         
-        public ShortcutAttribute(string name = "", int priority = 0)
+        public ShortcutAttribute(string name = "", int priority = 0, string icon = "")
         {
             Name = name;
             Priority = priority;
+            Icon = icon ?? "";
         }
     }
 }
