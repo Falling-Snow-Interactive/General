@@ -23,9 +23,11 @@
 }
 
 .shortcuts-toolbar__icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 4px;
+    /*flex-grow: 1;*/
+    /*flex-shrink: 0;*/
+    
+    width: 18px;
+    height: 18px;
 }
 
 .shortcuts-toolbar__spacer{
