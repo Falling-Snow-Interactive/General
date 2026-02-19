@@ -24,5 +24,7 @@ namespace Fsi.General.Math
 			this.min = min;
 			this.max = max;
 		}
+
+		public override string ToString() => $"{min} - {max}";
 	}
 }
