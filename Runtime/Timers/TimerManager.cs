@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,13 @@ namespace Fsi.General.Timers
     /// </summary>
     public class TimerManager : MbSingleton<TimerManager>
     {
+        #region Events
+
+        public static event Action<Timer> TimerAdded;
+        public static event Action<Timer> TimerRemoved;
+        
+        #endregion
+        
         #region Public Properties
         
         /// <summary>
@@ -33,8 +41,9 @@ namespace Fsi.General.Timers
         /// </summary>
         private void FixedUpdate()
         {
-            foreach (Timer t in timers)
+            foreach (Timer t in new List<Timer>(timers))
             {
+                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                 t.Tick(Time.fixedDeltaTime);
             }
         }
@@ -59,6 +68,7 @@ namespace Fsi.General.Timers
             }
             
             timers.Add(timer);
+            TimerAdded?.Invoke(timer);
             return true;
         }
 
@@ -72,7 +82,13 @@ namespace Fsi.General.Timers
         /// </returns>
         public bool Remove(Timer timer)
         {
-            return timers.Remove(timer);
+            bool removed = timers.Remove(timer);
+            if (removed)
+            {
+                TimerRemoved?.Invoke(timer);
+            }
+
+            return removed;
         }
         
         #endregion

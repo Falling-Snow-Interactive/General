@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="root" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:VisualElement name="time_group" style="flex-grow: 0; flex-direction: row; flex-shrink: 0; margin-left: 7px;">
+            <ui:Label text="remaining_label" name="remaining_label"/>
+            <ui:Label text="/" name="divider"/>
+            <ui:Label text="time_label" name="time_label"/>
+        </ui:VisualElement>
+        <ui:EnumField label="" value="Uninitialized" type="Fsi.General.Timers.TimerStatus, Fsi.General.Runtime" name="status_field"/>
+    </ui:VisualElement>
+</ui:UXML>
