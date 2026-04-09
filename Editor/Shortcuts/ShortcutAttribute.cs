@@ -15,7 +15,7 @@ namespace Fsi.General.Shortcuts
     {
         public string Name { get; }
         public int Priority { get; }
-        public string Icon { get; set; }
+        public string Icon { get; }
 
         public ShortcutAttribute()
         {

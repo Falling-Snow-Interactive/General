@@ -11,6 +11,7 @@ namespace Fsi.General.Shortcuts
     public sealed class ShortcutsEditor : EditorWindow
     {
         private const string StyleSheetPath = "Packages/com.fallingsnowinteractive.general/Editor/Shortcuts/ShortcutsEditor.uss";
+        private const float WindowHeight = 28f;
         
         private readonly List<MethodInfo> methods = new();
 
@@ -21,6 +22,11 @@ namespace Fsi.General.Shortcuts
         {
             ShortcutsEditor window = GetWindow<ShortcutsEditor>();
             window.titleContent = new GUIContent("Shortcuts");
+            
+            // Lock height, allow wide resizing.
+            window.minSize = new Vector2(250f, WindowHeight);
+            window.maxSize = new Vector2(10000f, WindowHeight);
+            
             window.Show();
         }
 
@@ -65,6 +71,7 @@ namespace Fsi.General.Shortcuts
                                      };
                 refreshImage.AddToClassList("shortcuts-toolbar__icon");
                 refreshButton.Insert(0, refreshImage);
+                refreshButton.text = "";
             }
             refreshButton.AddToClassList("shortcuts-toolbar__refresh");
             toolbar.Add(refreshButton);
@@ -137,7 +144,12 @@ namespace Fsi.General.Shortcuts
                                                };
 
                 shortcutButton.AddToClassList("shortcuts-toolbar__button");
-                AddIcon(shortcutButton, ResolveShortcutIcon(attribute));
+                if (!string.IsNullOrEmpty(attribute?.Icon))
+                {
+                    AddIcon(shortcutButton, ResolveShortcutIcon(attribute));
+                    shortcutButton.text = "";
+                }
+
                 toolbar?.Add(shortcutButton);
             }
         }
@@ -151,7 +163,20 @@ namespace Fsi.General.Shortcuts
             }
 
             Texture2D texture = EditorGUIUtility.IconContent(icon).image as Texture2D;
-            return texture != null ? texture : AssetDatabase.LoadAssetAtPath<Texture2D>(icon);
+            return texture ? texture : AssetDatabase.LoadAssetAtPath<Texture2D>(icon);
+        }
+
+        private static bool TryResolveShortcutIcon(ShortcutAttribute attr, out Texture2D icon)
+        {
+            icon = null;
+            string path = attr?.Icon?.Trim();
+            if (string.IsNullOrEmpty(path))
+            {
+                return false;
+            }
+
+            icon = EditorGUIUtility.IconContent(path).image as Texture2D;
+            return icon;
         }
 
         private static void AddIcon(VisualElement element, Texture2D texture)
