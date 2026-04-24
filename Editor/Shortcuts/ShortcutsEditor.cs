@@ -11,56 +11,60 @@ namespace Fsi.General.Shortcuts
     public sealed class ShortcutsEditor : EditorWindow
     {
         private const string StyleSheetPath = "Packages/com.fallingsnowinteractive.general/Editor/Shortcuts/ShortcutsEditor.uss";
-        private const float WindowHeight = 28f;
         
         private readonly List<MethodInfo> methods = new();
 
-        private Toolbar toolbar;
+        private Toolbar _toolbar;
 
         [MenuItem("FSI/Tools/Shortcut Toolbar")]
         public static void OpenWindow()
         {
-            ShortcutsEditor window = GetWindow<ShortcutsEditor>();
-            window.titleContent = new GUIContent("Shortcuts");
-            
-            // Lock height, allow wide resizing.
-            window.minSize = new Vector2(250f, WindowHeight);
-            window.maxSize = new Vector2(10000f, WindowHeight);
-            
+            ShortcutsEditor window = GetWindow<ShortcutsEditor>("Shortcuts");
             window.Show();
         }
 
         public void CreateGUI()
         {
-            rootVisualElement.Clear();
-            rootVisualElement.AddToClassList("shortcuts-editor");
-
-            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(StyleSheetPath);
-            if (styleSheet != null)
+            try
             {
-                rootVisualElement.styleSheets.Add(styleSheet);
-            }
-            
-            rootVisualElement.Clear();
-            
-            toolbar = new Toolbar();
-            toolbar.AddToClassList("shortcuts-toolbar");
-            rootVisualElement.Add(toolbar);
+                rootVisualElement.Clear();
+                rootVisualElement.AddToClassList("shortcuts-editor");
 
-            BuildToolbar();
+                StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(StyleSheetPath);
+                if (styleSheet != null && !rootVisualElement.styleSheets.Contains(styleSheet))
+                {
+                    rootVisualElement.styleSheets.Add(styleSheet);
+                }
+
+                _toolbar = CreateToolbar();
+                rootVisualElement.Add(_toolbar);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogException(ex);
+            }
         }
 
-        private void BuildToolbar()
+        private Toolbar CreateToolbar()
         {
-            toolbar.Clear();
-            
-            RefreshShortcuts();
+            Toolbar toolbar = new();
+            toolbar.AddToClassList("shortcuts-toolbar");
+
+            VisualElement shortcutButtons = RefreshShortcuts();
+            toolbar.Add(shortcutButtons);
 
             ToolbarSpacer s = new();
             s.AddToClassList("shortcuts-toolbar__spacer");
             toolbar.Add(s);
             
-            ToolbarButton refreshButton = new(BuildToolbar) { text = "Refresh" };
+            ToolbarButton refreshButton = CreateRefreshButton();
+            toolbar.Add(refreshButton);
+            return toolbar;
+        }
+
+        private ToolbarButton CreateRefreshButton()
+        {
+            ToolbarButton refreshButton = new(Refresh) { text = "Refresh" };
             Texture refreshIcon = EditorGUIUtility.IconContent("Refresh").image;
             if (refreshIcon != null)
             {
@@ -74,10 +78,17 @@ namespace Fsi.General.Shortcuts
                 refreshButton.text = "";
             }
             refreshButton.AddToClassList("shortcuts-toolbar__refresh");
-            toolbar.Add(refreshButton);
+            return refreshButton;
         }
 
-        private void RefreshShortcuts()
+        private void Refresh()
+        {
+            rootVisualElement.Remove(_toolbar);
+            _toolbar = CreateToolbar();
+            rootVisualElement.Add(_toolbar);
+        }
+
+        private VisualElement RefreshShortcuts()
         {
             methods.Clear();
             methods.AddRange(TypeCache.GetMethodsWithAttribute<ShortcutAttribute>());
@@ -91,11 +102,14 @@ namespace Fsi.General.Shortcuts
             methods.Clear();
             methods.AddRange(sorted);
 
-            RebuildShortcutList();
+            VisualElement shortcutButtons = RebuildShortcutList();
+            return shortcutButtons;
         }
 
-        private void RebuildShortcutList()
+        private VisualElement RebuildShortcutList()
         {
+            VisualElement root = new(){style = { flexDirection = FlexDirection.Row}};
+            
             // Root toolbar menus by name
             Dictionary<string, ToolbarMenu> toolbarMenus = new();
 
@@ -129,7 +143,7 @@ namespace Fsi.General.Shortcuts
                         menu.AddToClassList("shortcuts-toolbar__menu");
                         AddIcon(menu, ResolveShortcutIcon(attribute));
                         toolbarMenus[rootMenuName] = menu;
-                        toolbar?.Add(menu);
+                        root?.Add(menu);
                     }
 
                     menu.menu.AppendAction(itemPath, _ => method.Invoke(null, null));
@@ -150,8 +164,10 @@ namespace Fsi.General.Shortcuts
                     shortcutButton.text = "";
                 }
 
-                toolbar?.Add(shortcutButton);
+                root?.Add(shortcutButton);
             }
+
+            return root;
         }
 
         private static Texture2D ResolveShortcutIcon(ShortcutAttribute attribute)
