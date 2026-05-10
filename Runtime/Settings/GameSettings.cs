@@ -20,6 +20,11 @@ namespace Fsi.General.Settings
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void OnGameLaunch()
         {
+            if (!Settings || Settings.launchObjects == null)
+            {
+                return;
+            }
+            
             foreach (GameObject obj in Settings.launchObjects)
             {
                 GameObject go = Instantiate(obj);
